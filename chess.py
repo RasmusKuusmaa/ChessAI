@@ -26,30 +26,44 @@ def pawn_move(board, move):
     piece_to_move = board[move[0]][move[1]]
     
     if piece_to_move[1] != 'p':
+        print(1)
         return False
     
-    if move[1] != move[3]:
-        return
+
     distance = move[2] - move[0]
+    if move[1] != move[3]:
+        #capture
+        if abs(move[1] - move[3]) == 1:
+            if abs(move[0] - move[2]) != 1:
+                print(2)
+                return False
+            if abs(distance) != 1:
+                print(3)
+                return False
+    
+    elif board[move[2]][move[3]] != '':
+        print(9)
+        return False
     if abs(distance) <= 2:
        
         if move_count > 2:
     
             if abs(distance) != 1:
-                
+                print(5)
                 return False
         if piece_to_move[0] == 'W':
             if move[0] < move[1]:
-                
+                print(6)
                 return False
         elif piece_to_move[0] == 'B':
             if move[0] > move[1]:
+                print(7)
                 return False 
     
     else:
+        print(8)
         return False
-    if board[move[2]][move[3]] != '':
-        return False
+   
 
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
@@ -57,8 +71,11 @@ def pawn_move(board, move):
 
 
 pawn_move(board, 'd2d4')
-for row in board:
-    fr = ''
+pawn_move(board, 'e7e5')
+pawn_move(board, 'd4e5')
+for index, row in enumerate(board):
+    fr = f'{8 - index } '
     for i in row:
         fr += (i.center(2) + ' ') # keep the squarity of the board while printing
     print(fr)
+print('  a  b  c  d  e  f  g  h  ')
