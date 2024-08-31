@@ -95,18 +95,28 @@ def rook_move(board, move):
 
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
-        
-   
+def king_move(board, move):
+    move = decode_input(move)
+    piece_to_move = board[move[0]][move[1]]
+    ver_distance = abs(move[0] - move[2])
+    hor_distance = abs(move[1] - move[3])
+    if ver_distance > 1 or hor_distance > 1:
+        print('k1')
+        return False
+    #check if captured piece is the enemy
+    if board[move[2]][move[3]] != '':
+        if piece_to_move[0] == board[move[2]][move[3]][0]:
+            print('k2')
+            return False
+    board[move[0]][move[1]] = ''
+    board[move[2]][move[3]] = piece_to_move
         
 
 #pawn moves
-pawn_move(board, 'a2a4')
-pawn_move(board, 'a7a5')
-rook_move(board, 'a1a3')
-pawn_move(board, 'd2d3')
-rook_move(board, 'a3c3')
-rook_move(board, 'c3c7')
-
+pawn_move(board, 'e2e4')
+king_move(board, 'e1e2')
+king_move(board, 'e2f2')
+king_move(board, 'e2f3')
 for index, row in enumerate(board):
     fr = f'{8 - index } '
     for i in row:
