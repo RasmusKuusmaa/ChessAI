@@ -56,7 +56,7 @@ def pawn_move(board, move):
                 print(6)
                 return False
         elif piece_to_move[0] == 'B':
-            if move[0] > move[1]:
+            if move[0] < move[1]:
                 print(7)
                 return False 
     
@@ -67,12 +67,46 @@ def pawn_move(board, move):
 
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
+
+def rook_move(board, move):
+    move = decode_input(move)
+    piece_to_move = board[move[0]][move[1]]
     
+    #check paths linearity
+    if move[0] != move[2] and move[1] != move[3]:
+        print(move[0], move[2], move[1], move[3])
+        print('r1')
+        return False
+    #check if paths empty
+    for i in range(move[0] + 1, move[2]):
+        if board[i][move[1]] != '':
+            print('r2')
+            return False
+    for i in range(move[1] + 1, move[3]):
+        if board[move[0]][i]:
+            print(board[move[0]][i])
+            print('r3')
+            return False
+    #check if the piece captured == enemy
+    if board[move[2]][move[3]] != '':
+        if piece_to_move[0] == board[move[2]][move[3]][0]:
+            print('r4')
+            return False
 
+    board[move[0]][move[1]] = ''
+    board[move[2]][move[3]] = piece_to_move
+        
+   
+        
 
-pawn_move(board, 'd2d4')
-pawn_move(board, 'e7e5')
-pawn_move(board, 'd4e5')
+#pawn moves
+pawn_move(board, 'a2a4')
+pawn_move(board, 'a7a5')
+rook_move(board, 'a1a3')
+pawn_move(board, 'd2d3')
+rook_move(board, 'a3c3')
+rook_move(board, 'c3c7')
+
 for index, row in enumerate(board):
     fr = f'{8 - index } '
     for i in row:
