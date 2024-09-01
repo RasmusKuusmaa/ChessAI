@@ -74,7 +74,6 @@ def rook_move(board, move):
     
     #check paths linearity
     if move[0] != move[2] and move[1] != move[3]:
-        print(move[0], move[2], move[1], move[3])
         print('r1')
         return False
     #check if paths empty
@@ -133,11 +132,60 @@ def bishop_move(board, move):
 
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
+def queen_move(board, move):
+    move = decode_input(move)
+    piece_to_move = board[move[0]][move[1]]
+    row_diff = abs(move[0] - move[2])
+    col_diff = abs(move[1] - move[3])
+
+    if row_diff != col_diff and move[0] != move[2] and move[1] != move[3]:
+        print('q1')  
+        return False
+
+   
+    if move[0] == move[2] or move[1] == move[3]:
+
+        if move[0] == move[2]:
+            col_dir = 1 if move[3] > move[1] else -1
+            for col in range(move[1] + col_dir, move[3], col_dir):
+                if board[move[0]][col] != '':
+                    print('q2')  
+                    return False
+        
+
+        elif move[1] == move[3]:
+            row_dir = 1 if move[2] > move[0] else -1
+            for row in range(move[0] + row_dir, move[2], row_dir):
+                if board[row][move[1]] != '':
+                    print('q2') 
+                    return False
+
+    elif row_diff == col_diff:
+        row_dir = 1 if move[2] > move[0] else -1
+        col_dir = 1 if move[3] > move[1] else -1
+        for i in range(1, row_diff):
+            if board[move[0] + i * row_dir][move[1] + i * col_dir] != '':
+                print('q2')  
+                return False
+
+    # Check if the captured piece belongs to the enemy
+    if board[move[2]][move[3]] != '':
+        if board[move[2]][move[3]][0] == piece_to_move[0]:
+            print('q3')  #
+            return False
 
 
-pawn_move(board, 'b2b4')
-bishop_move(board, 'c1a3')
-bishop_move(board, 'a3b4')
+    board[move[0]][move[1]] = ''
+    board[move[2]][move[3]] = piece_to_move
+    return True
+
+pawn_move(board, 'd2d4')
+queen_move(board, 'd1d3')
+queen_move(board, 'd3e4')
+queen_move(board, 'e4f5')
+
+
+
 for index, row in enumerate(board):
     fr = f'{8 - index } '
     for i in row:
