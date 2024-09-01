@@ -110,13 +110,34 @@ def king_move(board, move):
             return False
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
-        
 
-#pawn moves
-pawn_move(board, 'e2e4')
-king_move(board, 'e1e2')
-king_move(board, 'e2f2')
-king_move(board, 'e2f3')
+def bishop_move(board, move):
+    move = decode_input(move)
+    piece_to_move = board[move[0]][move[1]]
+    #check if the movement is diagonal
+    if abs(move[0] - move[2]) != abs(move[1] - move[3]):
+        print('b1')
+        return False
+    #check if there are pieces in the way
+    row_dir = 1 if move[2] > move[0] else - 1
+    col_dir = 1 if move[3] > move[1] else -1
+    for i in range(1, abs(move[0]- move[2])):
+        if board[move[0] + i*row_dir][move[1] + i*col_dir] != '':
+            print('b2')
+            return False
+    #check if the captured piece belongs to the enemy
+    if board[move[2]][move[3]] != '':
+        if board[move[2]][move[3]][0] == piece_to_move[0]:
+            print('b3')
+            return False
+
+    board[move[0]][move[1]] = ''
+    board[move[2]][move[3]] = piece_to_move
+
+
+pawn_move(board, 'b2b4')
+bishop_move(board, 'c1a3')
+bishop_move(board, 'a3b4')
 for index, row in enumerate(board):
     fr = f'{8 - index } '
     for i in row:
