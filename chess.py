@@ -177,12 +177,32 @@ def queen_move(board, move):
 
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
-    return True
 
-pawn_move(board, 'd2d4')
-queen_move(board, 'd1d3')
-queen_move(board, 'd3e4')
-queen_move(board, 'e4f5')
+def knight_move(board, move):
+    move = decode_input(move)
+    piece_to_move = board[move[0]][move[1]]
+
+    vert_dist = abs(move[0] - move[2])
+    hor_dist = abs(move[1] - move[3])
+    if vert_dist == 1:
+        if hor_dist != 2:
+            print('n1')
+            return False
+    if hor_dist == 1:
+        if vert_dist != 2:
+            print('n2')
+            return False
+    if board[move[2]][move[3]] != '':
+        if board[move[2]][move[3]][0] == piece_to_move[0]:
+            print('n3')
+            return False
+
+    board[move[0]][move[1]] = ''
+    board[move[2]][move[3]] = piece_to_move
+
+knight_move(board, 'b1c3')
+pawn_move(board, 'd7d5') 
+knight_move(board, 'c3d5')
 
 
 
