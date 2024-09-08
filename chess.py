@@ -14,7 +14,40 @@ board = [
     ['Wp', 'Wp', 'Wp', 'Wp', 'Wp', 'Wp', 'Wp', 'Wp'],  
     ['Wr', 'Wn', 'Wb', 'Wq', 'Wk', 'Wb', 'Wn', 'Wr']   
 ]
+def check_check(friendly_col):
+    king_pos_r = 0
+    king_pos_c = 0
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] != '':
+                if board[i][j][0] == friendly_col:
+                    if board[i][j][1] == 'k':
+                        king_pos_r = i
+                        king_pos_c = j
+    for r in range(len(board)):
+        for c in range(len(board[i])):
+            if board[r][c] != '':
+                piece = board[r][c]
+                if piece[0] == friendly_col:
+                    #check rook
+                    if piece[1] == 'r':
+                        if king_pos_c == c or king_pos_r == r:
+                            if king_pos_r == r:
+                                min_c, max_c = sorted([king_pos_c, c])
+                                for i in range(min_c + 1, max_c):
+                                    if board[r][i] != '':
+                                        return False
+                            elif king_pos_c == c:
+                                min_r, max_r = sorted([king_pos_r, r])
+                                for j in range(min_r + 1, max_r):
+                                    if board[j][c] != '':
+                                        return False
+                            print('check')
+                            return True
+                        
+                        
 def decode_input(move):
+    
     move_start_row = 8 - int(move[1])
     move_start_col = col_not[move[0]]
     move_end_row = 8 - int(move[3])
@@ -56,7 +89,7 @@ def pawn_move(board, move):
                 print(6)
                 return False
         elif piece_to_move[0] == 'B':
-            if move[0] < move[1]:
+            if move[0] > move[1]:
                 print(7)
                 return False 
     
@@ -200,10 +233,11 @@ def knight_move(board, move):
     board[move[0]][move[1]] = ''
     board[move[2]][move[3]] = piece_to_move
 
-knight_move(board, 'b1c3')
+if move_count % 2 == 0:
+    check_check('b')
+else:
+    check_check('w')
 pawn_move(board, 'd7d5') 
-knight_move(board, 'c3d5')
-
 
 
 for index, row in enumerate(board):
