@@ -1,9 +1,11 @@
 import chess as ch
 import random
+import time
 class Main:
     def __init__(self):
         self.board = ch.Board()
         self.pos_searched = 0
+        self.to_search = 100000
     def evaluate(self):
         vals = {
             ch.ROOK: 5,
@@ -19,9 +21,11 @@ class Main:
         return eval
 
     def minimax(self, depth, alpha, beta, is_maximizing):
+        
         self.pos_searched += 1
         if self.pos_searched % 10000 == 0:
             print(f"{self.pos_searched:,}")
+                
         if depth == 0 or self.board.is_game_over():
             return self.evaluate()
         
@@ -48,24 +52,37 @@ class Main:
                     break
             return min_eval
 
-    def best_move(self, depth):
+    def best_move(self):
+        start_time = time.time()
         best_move = None
         best_val = -float('inf') if self.board.turn == ch.WHITE else float('inf')
         alpha = -float('inf')
         beta = float('inf')
-        for move in self.board.legal_moves:
-            self.board.push(move)
-            board_val = self.minimax(depth - 1, alpha, beta, not self.board.turn)
-            self.board.pop()
-            if self.board.turn: 
-                if board_val > best_val:
-                    best_val = board_val
-                    best_move = move
-            else:  
-                if board_val < best_val:
-                    best_val = board_val
-                    best_move = move
+        
+        depth = 1
+        while self.pos_searched <= self.to_search:
+            print({depth})            
+            for move in self.board.legal_moves:
+                self.board.push(move)
+                move_val = self.minimax(depth - 1, alpha, beta, not self.board.turn)
+                self.board.pop()
+                
+                if self.board.turn:
+                    if move_val > best_val:
+                        best_val = move_val
+                        best_move = move
+                else:
+                    if move_val < best_val:
+                        best_val = move_val
+                        best_move = move
+            depth += 1
+            if self.pos_searched >= self.to_search:
+                break
+
+        end_time = time.time()
+        print(f'Time taken: {end_time - start_time:.4f}')
         return best_move
+
     def hooman(self):
         print(self.board)
         try:
@@ -93,7 +110,8 @@ class Main:
                     self.pos_searched = 0
                     self.hooman()
                 else:
-                    self.board.push(self.best_move(depth = 5))
+                    self.pos_searched = 0
+                    self.board.push(self.best_move())
             res = self.board.result()
             print(res)
         except KeyboardInterrupt:
