@@ -1,5 +1,5 @@
 import chess as ch
-
+import random
 class Main:
     def __init__(self):
         self.board = ch.Board()
@@ -14,13 +14,14 @@ class Main:
         }
         eval = 0
         for type in vals:
-            eval += len(self.board.pieces(type, ch.WHITE)) * vals[type]
-            eval -= len(self.board.pieces(type, ch.BLACK)) * vals[type]
+            eval += len(self.board.pieces(type, ch.WHITE)) * vals[type] + random.randint(0, 100) * 0.000001
+            eval -= len(self.board.pieces(type, ch.BLACK)) * vals[type] + random.randint(0, 100) * 0.000001
         return eval
 
     def minimax(self, depth, alpha, beta, is_maximizing):
-        print(self.pos_searched + 1)
         self.pos_searched += 1
+        if self.pos_searched % 10000 == 0:
+            print(f"{self.pos_searched:,}")
         if depth == 0 or self.board.is_game_over():
             return self.evaluate()
         
