@@ -3,7 +3,7 @@ import chess as ch
 class Main:
     def __init__(self):
         self.board = ch.Board()
-
+        self.pos_searched = 0
     def evaluate(self):
         vals = {
             ch.ROOK: 5,
@@ -18,43 +18,53 @@ class Main:
             eval -= len(self.board.pieces(type, ch.BLACK)) * vals[type]
         return eval
 
-    def minimax(self, depth, is_maximizing):
+    def minimax(self, depth, alpha, beta, is_maximizing):
+        print(self.pos_searched + 1)
+        self.pos_searched += 1
         if depth == 0 or self.board.is_game_over():
             return self.evaluate()
+        
         if is_maximizing:
             max_eval = -float('inf')
             for move in self.board.legal_moves:
                 self.board.push(move)
-                eval = self.minimax(depth - 1, False)
+                eval = self.minimax(depth - 1, alpha, beta, False)
                 self.board.pop()
                 max_eval = max(max_eval, eval)
+                alpha = max(alpha, eval)
+                if beta <= alpha:
+                    break
             return max_eval
         else:
             min_eval = float('inf')
             for move in self.board.legal_moves:
                 self.board.push(move)
-                eval = self.minimax(depth - 1, True)
+                eval = self.minimax(depth - 1, alpha, beta, True)
                 self.board.pop()
                 min_eval = min(min_eval, eval)
+                beta = min(beta, eval)
+                if beta <= alpha:
+                    break
             return min_eval
 
     def best_move(self, depth):
         best_move = None
         best_val = -float('inf') if self.board.turn == ch.WHITE else float('inf')
+        alpha = -float('inf')
+        beta = float('inf')
         for move in self.board.legal_moves:
             self.board.push(move)
-            board_val = self.minimax(depth - 1, not self.board.turn)
+            board_val = self.minimax(depth - 1, alpha, beta, not self.board.turn)
             self.board.pop()
-            if self.board.turn:
+            if self.board.turn: 
                 if board_val > best_val:
                     best_val = board_val
                     best_move = move
-            else:
+            else:  
                 if board_val < best_val:
                     best_val = board_val
                     best_move = move
         return best_move
-
     def hooman(self):
         print(self.board)
         try:
@@ -79,9 +89,10 @@ class Main:
                 print(self.evaluate())
                 print(self.board.legal_moves)
                 if self.board.turn:
+                    self.pos_searched = 0
                     self.hooman()
                 else:
-                    self.board.push(self.best_move(depth = 2))
+                    self.board.push(self.best_move(depth = 5))
             res = self.board.result()
             print(res)
         except KeyboardInterrupt:
