@@ -1,11 +1,12 @@
 import chess as ch
 import random
 import time
+
 class Main:
     def __init__(self):
         self.board = ch.Board()
         self.pos_searched = 0
-        self.to_search = 100000
+        self.to_search = 90 * 1000
     def evaluate(self):
         vals = {
             ch.ROOK: 5,
@@ -61,7 +62,7 @@ class Main:
         
         depth = 1
         while self.pos_searched <= self.to_search:
-            print({depth})            
+            print('depth: ', depth)            
             for move in self.board.legal_moves:
                 self.board.push(move)
                 move_val = self.minimax(depth - 1, alpha, beta, not self.board.turn)
@@ -81,6 +82,7 @@ class Main:
 
         end_time = time.time()
         print(f'Time taken: {end_time - start_time:.4f}')
+        print(best_move)
         return best_move
 
     def hooman(self):

@@ -1,0 +1,8 @@
+120k: 1. 640 23.3; 2. 600 22.24; 3. 660 28.29
+600k: 1. 700. 34.78; 2. 640 29.6;  3. 670 30.89
+1m: 1. 7.37m 295.27
+
+Game 1: 90k against martin | tie| took all material by move 45
+but was unable to finish the game, terminated at move 60, doesnt know 
+what to do in endgames, increase depth in the end game
+to make it realize it can promote 
