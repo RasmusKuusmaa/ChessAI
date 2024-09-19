@@ -7,4 +7,36 @@ but was unable to finish the game, terminated at move 60, doesnt know
 what to do in endgames, increase depth in the end game
 to make it realize it can promote 
 
-#game 1.1 8/6k1/8/5P2/4P3/8/5K2/8 w - - 0 1
+#8/6k1/8/5P2/4P3/8/5K2/8 w - - 0 1
+
+
+
+
+
+
+# things to add:
+[0] = importance
+[1] = difficulty
+
+
+IE = draw detection!!
+
+EU change limit to be time based
+
+MM hashing | iru_??
+UE move ordering
+UM eval tweak
+mE piece vals
+Me check extensions
+?? PVS
+MD multi-THREADING !
+mD =OPENING BOOK??
+mD Quiescence search
+
+# MDA | c++
+
+to look into
+training
+q dqn mcts dl 
+
+Evolution?
