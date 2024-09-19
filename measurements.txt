@@ -6,3 +6,5 @@ Game 1: 90k against martin | tie| took all material by move 45
 but was unable to finish the game, terminated at move 60, doesnt know 
 what to do in endgames, increase depth in the end game
 to make it realize it can promote 
+
+#game 1.1 8/6k1/8/5P2/4P3/8/5K2/8 w - - 0 1

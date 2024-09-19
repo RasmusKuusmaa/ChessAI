@@ -6,7 +6,8 @@ class Main:
     def __init__(self):
         self.board = ch.Board()
         self.pos_searched = 0
-        self.to_search = 90 * 1000
+        self.to_search = 500 * 1000
+        self.board.set_fen('8/6k1/8/5P2/4P3/8/5K2/8 w - - 0 1')
     def evaluate(self):
         vals = {
             ch.ROOK: 5,
