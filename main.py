@@ -7,7 +7,8 @@ class Main:
         self.board = ch.Board()
         self.pos_searched = 0
         self.to_search = 500 * 1000
-        self.board.set_fen('8/6k1/8/5P2/4P3/8/5K2/8 w - - 0 1')
+        self.transposition_table = {}
+        #self.board.set_fen('')
     def evaluate(self):
         vals = {
             ch.ROOK: 5,
@@ -24,13 +25,19 @@ class Main:
 
     def minimax(self, depth, alpha, beta, is_maximizing):
         
+        board_hash = hash(self.board.fen())
+        if board_hash in self.transposition_table and self.transposition_table[board_hash][0] >= depth:
+            return self.transposition_table[board_hash][1]
         self.pos_searched += 1
         if self.pos_searched % 10000 == 0:
             print(f"{self.pos_searched:,}")
                 
         if depth == 0 or self.board.is_game_over():
-            return self.evaluate()
-        
+            eval = self.evaluate()
+            self.transposition_table[board_hash] = (depth, eval)
+            return eval
+   
+   
         if is_maximizing:
             max_eval = -float('inf')
             for move in self.board.legal_moves:
@@ -41,6 +48,7 @@ class Main:
                 alpha = max(alpha, eval)
                 if beta <= alpha:
                     break
+            self.transposition_table[board_hash] = (depth, max_eval)
             return max_eval
         else:
             min_eval = float('inf')
@@ -52,6 +60,7 @@ class Main:
                 beta = min(beta, eval)
                 if beta <= alpha:
                     break
+            self.transposition_table[board_hash] = (depth, min_eval)
             return min_eval
 
     def best_move(self):
