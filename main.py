@@ -26,7 +26,8 @@ class Main:
 
     def minimax(self, depth, alpha, beta, is_maximizing):
         
-        board_hash = hash(self.board.fen())
+        board_hash = self.board._transposition_key()
+
         if board_hash in self.transposition_table and self.transposition_table[board_hash][0] >= depth:
             return self.transposition_table[board_hash][1]
         self.pos_searched += 1
