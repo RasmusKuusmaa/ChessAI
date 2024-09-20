@@ -6,9 +6,10 @@ class Main:
     def __init__(self):
         self.board = ch.Board()
         self.pos_searched = 0
-        self.to_search = 500 * 1000
+        self.to_search = 5000
         self.transposition_table = {}
         #self.board.set_fen('')
+
     def evaluate(self):
         vals = {
             ch.ROOK: 5,
@@ -71,9 +72,14 @@ class Main:
         beta = float('inf')
         
         depth = 1
-        while self.pos_searched <= self.to_search:
+        while True:
+            if time.time() >= (start_time + self.to_search):
+                break
+            
             print('depth: ', depth)            
             for move in self.board.legal_moves:
+                if time.time() >= (start_time + self.to_search):
+                    break
                 self.board.push(move)
                 move_val = self.minimax(depth - 1, alpha, beta, not self.board.turn)
                 self.board.pop()
@@ -87,7 +93,7 @@ class Main:
                         best_val = move_val
                         best_move = move
             depth += 1
-            if self.pos_searched >= self.to_search:
+            if time.time() >= (start_time + self.to_search):
                 break
 
         end_time = time.time()
@@ -119,7 +125,6 @@ class Main:
                 print(self.evaluate())
                 print(self.board.legal_moves)
                 if self.board.turn:
-                    self.pos_searched = 0
                     self.hooman()
                 else:
                     self.pos_searched = 0
